@@ -2,14 +2,18 @@
 # Made by @thegeagle on GitHub
 # A simple Python GUI-based utility tool to allow users to download and compile CAIE past papers.
 # Enter subject code, year range, and paper, and a PDF will be generated.
-import tkinter
+
 # Imports
+import tkinter
 from tkinter import *
+import requests
+import os
+from pypdf import PdfWriter
 
 # Initialize GUI window
 window = Tk()
 window.title("CAIE Downloader by Geagle")
-window.geometry("500x450")
+window.geometry("500x500")
 
 # Initialize StringVars
 subjectVar = tkinter.StringVar()
@@ -17,6 +21,96 @@ paperVar = tkinter.StringVar()
 startYear = tkinter.StringVar()
 endYear = tkinter.StringVar()
 successStatus = tkinter.StringVar()
+
+
+def validateInput():
+    try:
+        requests.get("https://google.com", timeout=5)
+    except requests.ConnectionError:
+        successStatus.set("You are not connected to the internet!")
+        return False
+    if not subjectVar.get().isnumeric():
+        successStatus.set("The subject code must be a number! Try again.")
+        return False
+    if not len(subjectVar.get()) == 4:
+        successStatus.set("The subject code must be a 4-digit number! Try again.")
+        return False
+    if not paperVar.get().isnumeric():
+        successStatus.set("The paper code must be a number! Try again.")
+        return False
+    if not len(paperVar.get()) == 1:
+        successStatus.set("The paper code must be a 1-digit number! Try again.")
+        return False
+    if not startYear.get().isnumeric():
+        successStatus.set("The start year must be a number! Try again.")
+        return False
+    if not (len(startYear.get()) == 4 or len(startYear.get()) == 2):
+        successStatus.set("The start year must be a 4-digit or 2-digit number! Try again.")
+        return False
+    if not endYear.get().isnumeric():
+        successStatus.set("The end year must be a number! Try again.")
+        return False
+    if not (len(endYear.get()) == 4 or len(endYear.get()) == 2):
+        successStatus.set("The end year must be a 4-digit or 2-digit number! Try again.")
+        return False
+    if not int(endYear.get()) >= int(startYear.get()):
+        successStatus.set("The end year must be greater or equal to the start year! Try again.")
+        return False
+    return True
+
+
+# Method to download each paper
+def downloadPaper(subCode, paperCode, year, variant, series):
+    filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
+    print(f'Downloading {filename}')
+    url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
+    try:
+        paper = requests.get(url)
+        path = os.path.dirname(__file__) + f'/temp/{filename}'
+        with open(path, 'wb') as f:
+            f.write(paper.content)
+    except requests.exceptions.RequestException as e:
+        print(e)
+
+
+def compileTemp(subCode, paperCode, start, end):
+    import os
+
+    temp = PdfWriter()
+    for filename in os.listdir(os.path.dirname(__file__) + "/temp/"):
+        with open(os.path.join(os.path.dirname(__file__) + "/temp/", filename), 'rb') as f:
+            temp.append(f)
+        os.remove(filename)
+
+    outFile = open(os.path.dirname(__file__) + f'/{subCode} Paper {paperCode}s 20{start}-{end}.pdf', 'wb')
+    temp.write(outFile)
+    temp.close()
+    outFile.close()
+
+
+# Main method for the program
+def main():
+    if validateInput():
+        subCode = subjectVar.get()
+        paperCode = paperVar.get()
+        start = int(startYear.get()) if len(startYear.get()) == 2 else int(startYear.get()[-2:])
+        end = int(endYear.get()) if len(endYear.get()) == 2 else int(endYear.get()[-2:])
+        successStatus.set(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
+                          f'for the years 20{start}-{end}')
+        for year in range(start, end + 1):
+            if year >= 15:
+                downloadPaper(subCode, paperCode, year, '2', 'm')
+            downloadPaper(subCode, paperCode, year, '1', 's')
+            downloadPaper(subCode, paperCode, year, '2', 's')
+            downloadPaper(subCode, paperCode, year, '3', 's')
+            downloadPaper(subCode, paperCode, year, '1', 'w')
+            downloadPaper(subCode, paperCode, year, '2', 'w')
+            downloadPaper(subCode, paperCode, year, '3', 'w')
+
+        compileTemp(subCode, paperCode, str(start), str(end))
+
+        successStatus.set("Done processing your request!")
+
 
 title_label = Label(window, text="CAIE Downloader", font=('Montserrat', 25))
 title_label.pack()
@@ -31,19 +125,20 @@ paper_label.pack()
 paper_input = Entry(window, textvariable=paperVar, font=('Montserrat', 16))
 paper_input.pack()
 
-start_year_label = Label(window, text="\nYear to start downloading from", font=('Montserrat', 16))
+start_year_label = Label(window, text="\nYear to start downloading from (for example, 2022 or 22)",
+                         font=('Montserrat', 16))
 start_year_label.pack()
 start_year_input = Entry(window, textvariable=startYear, font=('Montserrat', 16))
 start_year_input.pack()
 
-end_year_label = Label(window, text="\nYear to end downloading from", font=('Montserrat', 16))
+end_year_label = Label(window, text="\nYear to end downloading from (for example, 2022 or 22)", font=('Montserrat', 16))
 end_year_label.pack()
 end_year_input = Entry(window, textvariable=endYear, font=('Montserrat', 16))
 end_year_input.pack()
 
 success_label = Label(window, textvariable=successStatus, font=('Montserrat', 20))
 success_label.pack(side=BOTTOM)
-sub_btn = Button(window, text='Submit', pady=10)
+sub_btn = Button(window, text='Submit', pady=10, command=main)
 sub_btn.pack(side=BOTTOM)
 
 window.mainloop()
