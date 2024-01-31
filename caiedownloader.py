@@ -90,6 +90,7 @@ def compileTemp(subCode, paperCode, start, end):
         outFile.insert_file(f)
         os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
 
+    outFile.delete_page(0)
     outFile.save(compiled)
 
 
@@ -117,6 +118,7 @@ def main():
         successStatus.set("Done processing your request!")
 
 
+# GUI
 title_label = Label(window, text="CAIE Downloader", font=('Montserrat', 25))
 title_label.pack()
 
