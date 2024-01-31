@@ -8,7 +8,8 @@ import tkinter
 from tkinter import *
 import requests
 import os
-from pypdf import PdfWriter
+import fitz
+import shutil
 
 # Initialize GUI window
 window = Tk()
@@ -61,6 +62,10 @@ def validateInput():
 
 # Method to download each paper
 def downloadPaper(subCode, paperCode, year, variant, series):
+    files = os.listdir(os.path.dirname(__file__) + "/temp/")
+    files.remove('.gitignore')
+    for filename in files:
+        os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
     filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
     print(f'Downloading {filename}')
     url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
@@ -74,18 +79,18 @@ def downloadPaper(subCode, paperCode, year, variant, series):
 
 
 def compileTemp(subCode, paperCode, start, end):
-    import os
+    compiled = os.path.dirname(__file__) + f'/outfiles/{subCode} Paper {paperCode}s 20{start}-{end}.pdf'
+    outFile = fitz.open(os.path.dirname(__file__) + "/assets/blank.pdf")
 
-    temp = PdfWriter()
-    for filename in os.listdir(os.path.dirname(__file__) + "/temp/"):
-        with open(os.path.join(os.path.dirname(__file__) + "/temp/", filename), 'rb') as f:
-            temp.append(f)
-        os.remove(filename)
+    files = os.listdir(os.path.dirname(__file__) + "/temp/")
+    files.remove('.gitignore')
+    for filename in files:
+        print(filename)
+        f = fitz.open(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
+        outFile.insert_file(f)
+        os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
 
-    outFile = open(os.path.dirname(__file__) + f'/{subCode} Paper {paperCode}s 20{start}-{end}.pdf', 'wb')
-    temp.write(outFile)
-    temp.close()
-    outFile.close()
+    outFile.save(compiled)
 
 
 # Main method for the program
@@ -98,7 +103,7 @@ def main():
         successStatus.set(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
                           f'for the years 20{start}-{end}')
         for year in range(start, end + 1):
-            if year >= 15:
+            if year >= 15 and not subCode == '9608' and not subCode == '9618':
                 downloadPaper(subCode, paperCode, year, '2', 'm')
             downloadPaper(subCode, paperCode, year, '1', 's')
             downloadPaper(subCode, paperCode, year, '2', 's')

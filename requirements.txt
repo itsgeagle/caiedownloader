@@ -1,6 +1,12 @@
 certifi==2023.11.17
+cffi==1.16.0
+chardet==5.2.0
 charset-normalizer==3.3.2
+cryptography==42.0.2
 idna==3.6
-pypdf==4.0.1
+pillow==10.2.0
+pycparser==2.21
+PyMuPDF==1.23.20
+PyMuPDFb==1.23.9
 requests==2.31.0
 urllib3==2.2.0
