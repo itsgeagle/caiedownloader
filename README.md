@@ -32,6 +32,8 @@ python3 -m pip install -r requirements.txt
 And that's it! Hopefully, if everything went right, you should be ready to use the CAIE Downloader!
 To use the application, simply run the `caiedownloader.py` file.
 
+## Housekeeping
+
 CAIE Downloader uses [Dynamic Papers](https://dynamicpapers.com/) to fetch and download papers. This is because of the convenient manner in which Dynamic Papers stores past papers. Unfortunately, this also means that the usage of this application is limited to a specific list of subjects:
 
   - IGCSEs:
