@@ -88,7 +88,7 @@ def compileTemp(subCode, paperCode, start, end):
         print(filename)
         f = fitz.open(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
         outFile.insert_file(f)
-        os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
+        f.close()
 
     outFile.delete_page(0)
     outFile.save(compiled)
