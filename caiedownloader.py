@@ -62,14 +62,10 @@ def validateInput():
 
 # Method to download each paper
 def downloadPaper(subCode, paperCode, year, variant, series):
-    files = os.listdir(os.path.dirname(__file__) + "/temp/")
-    files.remove('.gitignore')
-    for filename in files:
-        os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
     filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
-    print(f'Downloading {filename}')
     url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
     try:
+        print(f'Downloading {filename}')
         paper = requests.get(url)
         path = os.path.dirname(__file__) + f'/temp/{filename}'
         with open(path, 'wb') as f:
@@ -97,6 +93,12 @@ def compileTemp(subCode, paperCode, start, end):
 # Main method for the program
 def main():
     if validateInput():
+
+        files = os.listdir(os.path.dirname(__file__) + "/temp/")
+        files.remove('.gitignore')
+        for filename in files:
+            os.remove(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
+
         subCode = subjectVar.get()
         paperCode = paperVar.get()
         start = int(startYear.get()) if len(startYear.get()) == 2 else int(startYear.get()[-2:])
