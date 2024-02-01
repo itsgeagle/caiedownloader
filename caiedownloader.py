@@ -9,7 +9,6 @@ from tkinter import *
 import requests
 import os
 import fitz
-import shutil
 
 # Initialize GUI window
 window = Tk()
