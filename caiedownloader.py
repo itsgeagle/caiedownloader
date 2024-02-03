@@ -80,10 +80,14 @@ def compileTemp(subCode, paperCode, start, end):
     files = os.listdir(os.path.dirname(__file__) + "/temp/")
     files.remove('.gitignore')
     for filename in files:
-        print(filename)
-        f = fitz.open(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
-        outFile.insert_file(f)
-        f.close()
+        print(f'Compiling {filename}')
+        try:
+            f = fitz.open(os.path.join(os.path.dirname(__file__) + "/temp/" + filename))
+        except fitz.FileDataError:
+            print(f"Failed to compile {filename}")
+        else:
+            outFile.insert_file(f)
+            f.close()
 
     outFile.delete_page(0)
     outFile.save(compiled)
