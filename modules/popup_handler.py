@@ -47,7 +47,7 @@ def error_popup(errorMessage):
 
     cancel_button = tk.Button(
         error_window,
-        text="Cancel",
+        text="Close",
         command=error_window.destroy
     )
     cancel_button.pack(pady=10)
