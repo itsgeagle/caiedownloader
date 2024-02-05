@@ -6,50 +6,11 @@
 # Imports
 import requests
 from modules.file_handler import download_paper, compile_pdf, clear_temp_files
-from modules.version_checker import compare_version
+from modules.verification_handler import compare_version, validate_input
 from modules.popup_handler import version_popup, error_popup
 from modules.gui import *
 
 VERSION = 'v0.2.0-beta'
-
-
-def validate_input():
-    try:
-        requests.get("https://google.com", timeout=5)
-    except requests.ConnectionError:
-        error_popup("You are not connected to the internet!")
-        return False
-    if not subject_var.get().isnumeric():
-        error_popup("The subject code must be a number! Try again.")
-        return False
-    if not len(subject_var.get()) == 4:
-        error_popup("The subject code must be a 4-digit number! Try again.")
-        return False
-    if not paper_var.get().isnumeric():
-        error_popup("The paper code must be a number! Try again.")
-        return False
-    if not len(paper_var.get()) == 1:
-        error_popup("The paper code must be a 1-digit number! Try again.")
-        return False
-    if not start_year.get().isnumeric():
-        error_popup("The start year must be a number! Try again.")
-        return False
-    if not (len(start_year.get()) == 4 or len(start_year.get()) == 2):
-        error_popup("The start year must be a 4-digit or 2-digit number! Try again.")
-        return False
-    if not end_year.get().isnumeric():
-        error_popup("The end year must be a number! Try again.")
-        return False
-    if not (len(end_year.get()) == 4 or len(end_year.get()) == 2):
-        error_popup("The end year must be a 4-digit or 2-digit number! Try again.")
-        return False
-    if not int(end_year.get()) >= int(start_year.get()):
-        error_popup("The end year must be greater or equal to the start year! Try again.")
-        return False
-    if feb_march.get() == 'N' and may_june.get() == 'N' and may_june.get() == 'N':
-        error_popup("You must select at least one exam series! Try again.")
-        return False
-    return True
 
 
 # Main method for the program
