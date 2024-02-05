@@ -1,7 +1,7 @@
 # Dictionaries which store codes and url slugs for various IGCSE, OL, and A Level subjects
 # Sourced from: Ali246801232/CIEPaperFinder
 
-IGCSE = {
+SLUGS = {
     "0452": "Accounting%20(0452)/",
     "0985": "Accounting%20(9-1)%20(0985)/",
     "0548": "Afrikaans%20-%20Second%20Language%20(0548)/",
@@ -102,10 +102,7 @@ IGCSE = {
     "0471": "Travel%20&%20Tourism%20(0471)/",
     "0513": "Turkish%20-%20First%20Language%20(0513)/",
     "0539": "Urdu%20as%20a%20Second%20Language%20(0539)/",
-    "0408": "World%20Literature%20(0408)/"
-}
-
-OLevel = {
+    "0408": "World%20Literature%20(0408)/",
     "7707": "Accounting%20(7707)/",
     "5038": "Agriculture%20(5038)/",
     "3180": "Arabic%20(3180)/",
@@ -156,10 +153,7 @@ OLevel = {
     "3226": "Tamil%20(3226)/",
     "7096": "Travel%20and%20Tourism%20(7096)/",
     "3247": "Urdu%20-%20First%20Language%20(3247)/",
-    "3248": "Urdu%20-%20Second%20Language%20(3248)/"
-}
-
-ALevel = {
+    "3248": "Urdu%20-%20Second%20Language%20(3248)/",
     "9706": "Accounting%20(9706)/",
     "9679": "Afrikaans%20(9679)/",
     "8779": "Afrikaans%20-%20First%20Language%20(AS%20Level%20only)%20(8779)/",
