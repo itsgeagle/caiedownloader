@@ -10,7 +10,7 @@ subjectVar = StringVar()
 paperVar = StringVar()
 startYear = StringVar()
 endYear = StringVar()
-successStatus = StringVar()
+success_status = StringVar()
 
 # GUI
 title_label = Label(root, text="CAIE Downloader", font=('Montserrat', 25))
@@ -37,5 +37,5 @@ end_year_label.pack()
 end_year_input = Entry(root, textvariable=endYear, font=('Montserrat', 16))
 end_year_input.pack()
 
-success_label = Label(root, textvariable=successStatus, font=('Montserrat', 20))
+success_label = Label(root, textvariable=success_status, font=('Montserrat', 20))
 success_label.pack(side=BOTTOM)

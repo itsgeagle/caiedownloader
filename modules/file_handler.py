@@ -8,7 +8,7 @@ TEMPPATH = os.path.dirname(__file__)[:-8] + "/temp/"
 
 
 # Function to download the paper which matches the entered type
-def downloadPaper(subCode, paperCode, year, variant, series):
+def download_paper(subCode, paperCode, year, variant, series):
     filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
     url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
     try:
@@ -22,7 +22,7 @@ def downloadPaper(subCode, paperCode, year, variant, series):
 
 
 # Function to take all the PDFs currently in the /temp/ folder and compile them into a single PDF
-def compileTemp(subCode, paperCode, start, end):
+def compile_pdf(subCode, paperCode, start, end):
     compiled = os.path.dirname(__file__) + f'/outfiles/{subCode} Paper {paperCode}s 20{start}-{end}.pdf'
     outFile = fitz.open(os.path.dirname(__file__) + "/assets/blank.pdf")
 
@@ -43,7 +43,7 @@ def compileTemp(subCode, paperCode, start, end):
 
 
 # Function to clear the /temp/ folder at the beginning of each program run
-def clearTemp():
+def clear_temp_files():
     files = os.listdir(TEMPPATH)
     files.remove('.gitignore')
     for filename in files:
