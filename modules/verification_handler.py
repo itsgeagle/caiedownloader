@@ -2,7 +2,7 @@
 import requests  # to make HTTP requests to GitHub API
 from modules.gui import *
 from modules.popup_handler import error_popup
-from modules.dictionaries import SLUGS
+from modules.dictionaries import IGCSE, ALevel, OLevel
 
 
 #  Function to compare the current version with the latest version
@@ -49,7 +49,7 @@ def validate_input():
     if not len(subject_var.get()) == 4:
         error_popup("The subject code must be a 4-digit number! Try again.")
         return False
-    if not subject_var.get() in SLUGS:
+    if not (subject_var.get() in IGCSE or subject_var.get() in ALevel or subject_var.get() in OLevel):
         error_popup("The subject code entered does not match a supported subject! Try again.")
         return False
     if not paper_var.get().isnumeric():
