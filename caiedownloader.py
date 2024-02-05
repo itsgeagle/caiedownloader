@@ -1,13 +1,12 @@
 # CAIE Downloader
-# Made by @itsgeagle on GitHub
+# Author: @itsgeagle
 # A simple Python GUI-based utility tool to allow users to download and compile CAIE past papers.
 # Enter subject code, year range, and paper, and a PDF will be generated.
 
 # Imports
-import requests
 from modules.file_handler import download_paper, compile_pdf, clear_temp_files
 from modules.verification_handler import compare_version, validate_input
-from modules.popup_handler import version_popup, error_popup
+from modules.popup_handler import version_popup, message_popup
 from modules.gui import *
 
 VERSION = 'v0.2.0-beta'
@@ -36,9 +35,9 @@ def main():
                 download_paper(subCode, paperCode, year, '3', 'w')
 
         if not compile_pdf(subCode, paperCode, str(start), str(end)):
-            error_popup("Your query did not end up downloading any valid files. Please try again.")
+            message_popup("Your query did not end up downloading any valid files. Please try again.", "Error")
         else:
-            error_popup("Done processing your request!")
+            message_popup("Done processing your request!", "Success")
 
 
 sub_btn = Button(root, text='Submit', pady=10, command=main)
@@ -50,6 +49,6 @@ if not version_status[0]:
     if version_status[1]:
         version_popup(version_status[1])
     else:
-        error_popup(version_status[2])
+        message_popup(version_status[2])
 
 root.mainloop()

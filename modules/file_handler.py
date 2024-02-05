@@ -1,8 +1,9 @@
-# Contains all the file handling methods for the CAIE Downloader, such as downloading and compiling PDFs
-
+# Contains all the file handling methods, such as downloading and compiling PDFs
 import os
 import requests
 import fitz
+from modules.dictionaries import IGCSE, ALevel, OLevel
+
 
 HOMEPATH = os.path.dirname(__file__)[:-8]
 TEMPPATH = HOMEPATH + "/temp/"
@@ -10,14 +11,24 @@ TEMPPATH = HOMEPATH + "/temp/"
 
 # Function to download the paper which matches the entered type
 def download_paper(subCode, paperCode, year, variant, series):
+
     filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
-    url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
+    if subCode in IGCSE:
+        url = f'https://papers.gceguide.com/Cambridge%20IGCSE/{IGCSE.get(subCode)}{filename}'
+    elif subCode in ALevel:
+        url = f'https://papers.gceguide.com/A%20Levels/{ALevel.get(subCode)}{filename}'
+    else:
+        url = f'https://papers.gceguide.com/O%20Levels/{OLevel.get(subCode)}{filename}'
+
+    print(f'Downloading {filename}')
     try:
-        print(f'Downloading {filename}')
         paper = requests.get(url)
-        path = TEMPPATH + filename
-        with open(path, 'wb') as f:
-            f.write(paper.content)
+        if paper.status_code != 404:
+            path = TEMPPATH + filename
+            with open(path, 'wb') as f:
+                f.write(paper.content)
+        else:
+            print(f"Failed to download {filename} - 404 error, paper was not found.")
     except requests.exceptions.RequestException as e:
         print(e)
 
@@ -29,6 +40,7 @@ def compile_pdf(subCode, paperCode, start, end):
 
     files = os.listdir(TEMPPATH)
     files.remove('.gitignore')
+
     status = False
     for filename in files:
         print(f'Compiling {filename}')

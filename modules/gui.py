@@ -1,3 +1,4 @@
+# Contains the primary GUI elements
 from tkinter import *
 
 # Initialize GUI window

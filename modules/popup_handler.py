@@ -1,3 +1,4 @@
+# Contains helper methods for creating popups
 import tkinter as tk
 from modules.gui import root
 import webbrowser
@@ -35,13 +36,13 @@ def version_popup(latest):
     version.wait_window()
 
 
-def error_popup(errorMessage):
+def message_popup(message, title):
     error_window = tk.Toplevel(root)
-    error_window.title("Notice")
+    error_window.title(title)
 
     tk.Label(
         error_window,
-        text=errorMessage,
+        text=message,
         font=("Montserrat", 16)
     ).pack()
 
