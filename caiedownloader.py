@@ -19,32 +19,35 @@ def validate_input():
     except requests.ConnectionError:
         error_popup("You are not connected to the internet!")
         return False
-    if not subjectVar.get().isnumeric():
+    if not subject_var.get().isnumeric():
         error_popup("The subject code must be a number! Try again.")
         return False
-    if not len(subjectVar.get()) == 4:
+    if not len(subject_var.get()) == 4:
         error_popup("The subject code must be a 4-digit number! Try again.")
         return False
-    if not paperVar.get().isnumeric():
+    if not paper_var.get().isnumeric():
         error_popup("The paper code must be a number! Try again.")
         return False
-    if not len(paperVar.get()) == 1:
+    if not len(paper_var.get()) == 1:
         error_popup("The paper code must be a 1-digit number! Try again.")
         return False
-    if not startYear.get().isnumeric():
+    if not start_year.get().isnumeric():
         error_popup("The start year must be a number! Try again.")
         return False
-    if not (len(startYear.get()) == 4 or len(startYear.get()) == 2):
+    if not (len(start_year.get()) == 4 or len(start_year.get()) == 2):
         error_popup("The start year must be a 4-digit or 2-digit number! Try again.")
         return False
-    if not endYear.get().isnumeric():
+    if not end_year.get().isnumeric():
         error_popup("The end year must be a number! Try again.")
         return False
-    if not (len(endYear.get()) == 4 or len(endYear.get()) == 2):
+    if not (len(end_year.get()) == 4 or len(end_year.get()) == 2):
         error_popup("The end year must be a 4-digit or 2-digit number! Try again.")
         return False
-    if not int(endYear.get()) >= int(startYear.get()):
+    if not int(end_year.get()) >= int(start_year.get()):
         error_popup("The end year must be greater or equal to the start year! Try again.")
+        return False
+    if feb_march.get() == 'N' and may_june.get() == 'N' and may_june.get() == 'N':
+        error_popup("You must select at least one exam series! Try again.")
         return False
     return True
 
@@ -53,25 +56,28 @@ def validate_input():
 def main():
     if validate_input():
         clear_temp_files()
-        subCode = subjectVar.get()
-        paperCode = paperVar.get()
-        start = int(startYear.get()) if len(startYear.get()) == 2 else int(startYear.get()[-2:])
-        end = int(endYear.get()) if len(endYear.get()) == 2 else int(endYear.get()[-2:])
-        success_status.set(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
-                           f'for the years 20{start}-{end}')
+        subCode = subject_var.get()
+        paperCode = paper_var.get()
+        start = int(start_year.get()) if len(start_year.get()) == 2 else int(start_year.get()[-2:])
+        end = int(end_year.get()) if len(end_year.get()) == 2 else int(end_year.get()[-2:])
+        print(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
+              f'for the years 20{start}-{end}')
         for year in range(start, end + 1):
-            if year >= 15:
+            if feb_march.get() == 'Y':
                 download_paper(subCode, paperCode, year, '2', 'm')
-            download_paper(subCode, paperCode, year, '1', 's')
-            download_paper(subCode, paperCode, year, '2', 's')
-            download_paper(subCode, paperCode, year, '3', 's')
-            download_paper(subCode, paperCode, year, '1', 'w')
-            download_paper(subCode, paperCode, year, '2', 'w')
-            download_paper(subCode, paperCode, year, '3', 'w')
+            if may_june.get() == 'Y':
+                download_paper(subCode, paperCode, year, '1', 's')
+                download_paper(subCode, paperCode, year, '2', 's')
+                download_paper(subCode, paperCode, year, '3', 's')
+            if may_june.get() == 'Y':
+                download_paper(subCode, paperCode, year, '1', 'w')
+                download_paper(subCode, paperCode, year, '2', 'w')
+                download_paper(subCode, paperCode, year, '3', 'w')
 
-        compile_pdf(subCode, paperCode, str(start), str(end))
-
-        error_popup("Done processing your request!")
+        if not compile_pdf(subCode, paperCode, str(start), str(end)):
+            error_popup("Your query did not end up downloading any valid files. Please try again.")
+        else:
+            error_popup("Done processing your request!")
 
 
 sub_btn = Button(root, text='Submit', pady=10, command=main)

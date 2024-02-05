@@ -37,7 +37,7 @@ def version_popup(latest):
 
 def error_popup(errorMessage):
     error_window = tk.Toplevel(root)
-    error_window.title("Error")
+    error_window.title("Notice")
 
     tk.Label(
         error_window,
