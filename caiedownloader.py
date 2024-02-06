@@ -23,7 +23,7 @@ def main():
         print(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
               f'for the years 20{start}-{end}')
         for year in range(start, end + 1):
-            if feb_march.get() == 'Y':
+            if feb_march.get() == 'Y' and year > 15:
                 download_paper(subCode, paperCode, year, '2', 'm')
             if may_june.get() == 'Y':
                 download_paper(subCode, paperCode, year, '1', 's')

@@ -21,7 +21,7 @@ def download_paper(subCode, paperCode, year, variant, series):
 
     print(f'Downloading {filename} from {url}')
     try:
-        paper = requests.get(url, headers=headers)
+        paper = requests.get(url)
         if paper.status_code != 404:
             path = TEMPPATH + filename
             with open(path, 'wb') as f:
