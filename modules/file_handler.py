@@ -11,18 +11,17 @@ TEMPPATH = HOMEPATH + "/temp/"
 
 # Function to download the paper which matches the entered type
 def download_paper(subCode, paperCode, year, variant, series):
-
     filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
     if subCode in IGCSE:
-        url = f'https://papers.gceguide.com/Cambridge%20IGCSE/{IGCSE.get(subCode)}{filename}'
+        url = f'https://papers.gceguide.com/Cambridge%20IGCSE/{IGCSE.get(subCode)}20{year}/{filename}'
     elif subCode in ALevel:
-        url = f'https://papers.gceguide.com/A%20Levels/{ALevel.get(subCode)}{filename}'
+        url = f'https://papers.gceguide.com/A%20Levels/{ALevel.get(subCode)}20{year}/{filename}'
     else:
-        url = f'https://papers.gceguide.com/O%20Levels/{OLevel.get(subCode)}{filename}'
+        url = f'https://papers.gceguide.com/O%20Levels/{OLevel.get(subCode)}20{year}/{filename}'
 
-    print(f'Downloading {filename}')
+    print(f'Downloading {filename} from {url}')
     try:
-        paper = requests.get(url)
+        paper = requests.get(url, headers=headers)
         if paper.status_code != 404:
             path = TEMPPATH + filename
             with open(path, 'wb') as f:

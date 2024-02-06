@@ -29,7 +29,7 @@ def main():
                 download_paper(subCode, paperCode, year, '1', 's')
                 download_paper(subCode, paperCode, year, '2', 's')
                 download_paper(subCode, paperCode, year, '3', 's')
-            if may_june.get() == 'Y':
+            if oct_nov.get() == 'Y':
                 download_paper(subCode, paperCode, year, '1', 'w')
                 download_paper(subCode, paperCode, year, '2', 'w')
                 download_paper(subCode, paperCode, year, '3', 'w')
