@@ -23,6 +23,9 @@ When run, the program produces a simple, elegant and intuitive GUI window, where
 <img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/6f674480-e673-4528-9fdc-440314b9c38c">
 </div>
 
+<img width="598" alt="image" src="">
+
+
 ### Download the [latest program release](https://github.com/itsgeagle/caiedownloader/releases/latest/)!
 
 ## Installation
