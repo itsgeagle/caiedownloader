@@ -4,7 +4,6 @@ from tkinter import *
 # Initialize GUI window
 root = Tk()
 root.title("CAIE Downloader by Geagle")
-root.geometry("1000x1000")
 
 # Initialize StringVars
 subject_var = StringVar()
