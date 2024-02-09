@@ -1,7 +1,9 @@
 # Contains helper methods for creating popups
 import tkinter as tk
+from tkinter import filedialog
 from modules.gui import root
 import webbrowser
+import os
 
 
 # Function to create a popup window displaying the latest version of the software
@@ -57,3 +59,18 @@ def message_popup(message, title):
     error_window.grab_set()
     error_window.focus_set()
     error_window.wait_window()
+
+
+# Function to allow user to browse for download path
+def browse_path(file_name):
+    # Create Toplevel window for file dialog
+    file_dialog = tk.Toplevel()
+    file_dialog.withdraw()
+
+    # Browse file path from save dialog
+    downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+    file_path = filedialog.asksaveasfilename(initialdir=downloads_folder, initialfile=file_name, defaultextension=".pdf")
+    file_dialog.destroy()
+
+    # Return file path
+    return file_path

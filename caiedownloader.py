@@ -49,6 +49,6 @@ if not version_status[0]:
     if version_status[1]:
         version_popup(version_status[1])
     else:
-        message_popup(version_status[2])
+        message_popup(version_status[2], "Error")
 
 root.mainloop()
