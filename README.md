@@ -17,7 +17,7 @@ This project provides a simple GUI-based utility tool which allows students of t
 * The **years** for which papers are to be downloaded (_e.g. 2020-23_)
 * The **exam series** for which to download papers (_e.g. Feb/March_)
 
-When run, the program produces a simple, elegant and intuitive GUI window, where you can enter the details of what you would like to download. The file will automatically be created and output to the `/outfiles/` directory of your project folder.
+When run, the program produces a simple, elegant and intuitive GUI window, where you can enter the details of what you would like to download. The file will automatically be created and output to the directory which you pick during the file selection menu which pops up after downloading is finished.
 
 <div align="center">
 <img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/7980fdfa-cac7-48af-a248-0171826a06df">
