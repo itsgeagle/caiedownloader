@@ -11,8 +11,8 @@ TEMPPATH = HOMEPATH + "/temp/"
 
 
 # Function to download the paper which matches the entered type
-def download_paper(subCode, paperCode, year, variant, series):
-    filename = f'{subCode}_{series}{year}_qp_{paperCode}{variant}.pdf'
+def download_paper(subCode, paperCode, year, variant, series, paperType):
+    filename = f'{subCode}_{series}{year}_{paperType}_{paperCode}{variant}.pdf'
     if subCode in IGCSE:
         url = f'https://papers.gceguide.com/Cambridge%20IGCSE/{IGCSE.get(subCode)}20{year}/{filename}'
     elif subCode in ALevel:

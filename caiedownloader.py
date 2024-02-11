@@ -20,19 +20,21 @@ def main():
         paperCode = paper_var.get()
         start = int(start_year.get()) if len(start_year.get()) == 2 else int(start_year.get()[-2:])
         end = int(end_year.get()) if len(end_year.get()) == 2 else int(end_year.get()[-2:])
-        print(f'Attempting to fetch all paper {paperCode}s for the subject code {subCode} '
+        paperType = paper_type.get()
+        print(f'Attempting to fetch all {paperType} with code {paperCode}s for the subject code {subCode} '
               f'for the years 20{start}-{end}')
+        paperType = 'qp' if paperType == 'Question Papers' else 'ms'
         for year in range(start, end + 1):
             if feb_march.get() == 'Y' and year > 15:
-                download_paper(subCode, paperCode, year, '2', 'm')
+                download_paper(subCode, paperCode, year, '2', 'm', paperType)
             if may_june.get() == 'Y':
-                download_paper(subCode, paperCode, year, '1', 's')
-                download_paper(subCode, paperCode, year, '2', 's')
-                download_paper(subCode, paperCode, year, '3', 's')
+                download_paper(subCode, paperCode, year, '1', 's', paperType)
+                download_paper(subCode, paperCode, year, '2', 's', paperType)
+                download_paper(subCode, paperCode, year, '3', 's', paperType)
             if oct_nov.get() == 'Y':
-                download_paper(subCode, paperCode, year, '1', 'w')
-                download_paper(subCode, paperCode, year, '2', 'w')
-                download_paper(subCode, paperCode, year, '3', 'w')
+                download_paper(subCode, paperCode, year, '1', 'w', paperType)
+                download_paper(subCode, paperCode, year, '2', 'w', paperType)
+                download_paper(subCode, paperCode, year, '3', 'w', paperType)
 
         if not compile_pdf(subCode, paperCode, str(start), str(end)):
             message_popup("Your query did not end up downloading any valid files. Please try again.", "Error")
