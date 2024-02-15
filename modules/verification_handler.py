@@ -52,12 +52,15 @@ def validate_input():
     if not (subject_var.get() in IGCSE or subject_var.get() in ALevel or subject_var.get() in OLevel):
         message_popup("The subject code entered does not match a supported subject! Try again.", "Error")
         return False
-    if not paper_var.get().isnumeric():
-        message_popup("The paper code must be a number! Try again.", "Error")
-        return False
-    if not len(paper_var.get()) == 1:
-        message_popup("The paper code must be a 1-digit number! Try again.", "Error")
-        return False
+    for paper_code in paper_var.get().split(','):
+        paper_code = paper_code.strip(" ")
+        print(paper_code)
+        if not paper_code.isnumeric():
+            message_popup("The paper code must be a number! Try again.", "Error")
+            return False
+        if not len(paper_code) == 1:
+            message_popup("The paper code must be a 1-digit number! Try again.", "Error")
+            return False
     if not start_year.get().isnumeric():
         message_popup("The start year must be a number! Try again.", "Error")
         return False
