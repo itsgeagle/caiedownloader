@@ -5,9 +5,9 @@
 
 # Imports
 from modules.file_handler import download_paper, compile_pdf, clear_temp_files
-from modules.verification_handler import compare_version, validate_input
-from modules.popup_handler import version_popup, message_popup
 from modules.gui import *
+from modules.popup_handler import version_popup, message_popup
+from modules.verification_handler import compare_version, validate_input
 
 VERSION = 'v1.1.0'
 

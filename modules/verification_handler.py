@@ -1,9 +1,10 @@
 # Functions to deal with validating and verifying content, input, and program version
 # Author: @itsgeagle
 import requests
+
+from modules.dictionaries import IGCSE, ALevel, OLevel
 from modules.gui import *
 from modules.popup_handler import message_popup
-from modules.dictionaries import IGCSE, ALevel, OLevel
 
 
 #  Compare the current version with the latest version

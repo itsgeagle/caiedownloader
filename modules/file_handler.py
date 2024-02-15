@@ -1,10 +1,11 @@
 # Contains all the file handling methods, such as downloading and compiling PDFs
 import os
-import requests
+
 import fitz
+import requests
+
 from modules.dictionaries import IGCSE, ALevel, OLevel
 from modules.popup_handler import browse_path, message_popup
-
 
 HOMEPATH = os.path.dirname(__file__)[:-8]
 TEMPPATH = HOMEPATH + "/temp/"
