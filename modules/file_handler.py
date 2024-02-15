@@ -1,10 +1,11 @@
 # Contains all the file handling methods, such as downloading and compiling PDFs
 import os
-import requests
+
 import fitz
+import requests
+
 from modules.dictionaries import IGCSE, ALevel, OLevel
 from modules.popup_handler import browse_path, message_popup
-
 
 HOMEPATH = os.path.dirname(__file__)[:-8]
 TEMPPATH = HOMEPATH + "/temp/"
@@ -35,7 +36,7 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
 
 # Function to take all the PDFs currently in the /temp/ folder and compile them into a single PDF
 def compile_pdf(subCode, paperCode, start, end):
-    defaultName = f'{subCode} Paper {paperCode}s 20{start}-{end}.pdf'
+    defaultName = f'{subCode} Paper {paperCode} 20{start}-{end}.pdf'
     compiled = browse_path(defaultName)
     while compiled == '':
         message_popup("Please select a path to save the file to!", "Error")

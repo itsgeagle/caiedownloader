@@ -13,7 +13,7 @@
 This project provides a simple GUI-based utility tool which allows students of the CAIE high school curriculum (IGCSEs, O Levels, AS and A Levels) to download past papers and compile them into a single PDF file, which can then be printed, solved on a tablet, or used in any other way. The tool allows you to customize:
 
 * The **subject code** being downloaded (_e.g. 9701_)
-* The **paper code** being downloaded (_e.g. 1_)
+* The **paper code(s)** being downloaded (_e.g. 1,2,4_)
 * The **years** for which papers are to be downloaded (_e.g. 2020-23_)
 * The **exam series** for which to download papers (_e.g. Feb/March_)
 

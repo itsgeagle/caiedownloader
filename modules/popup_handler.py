@@ -1,9 +1,10 @@
 # Contains helper methods for creating popups
-import tkinter as tk
-from tkinter import filedialog
-from modules.gui import root
-import webbrowser
 import os
+import tkinter as tk
+import webbrowser
+from tkinter import filedialog
+
+from modules.gui import root
 
 
 # Function to create a popup window displaying the latest version of the software
