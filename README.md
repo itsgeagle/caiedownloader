@@ -20,8 +20,9 @@ This project provides a simple GUI-based utility tool which allows students of t
 When run, the program produces a simple, elegant and intuitive GUI window, where you can enter the details of what you would like to download. The file will automatically be created and output to the directory which you pick during the file selection menu which pops up after downloading is finished.
 
 <div align="center">
-<img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/b983dfe5-5cd3-4543-b340-af4a010aa393">
+<img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/8b37d459-3059-4446-a004-41c053ad6a44">
 </div>
+
 
 
 ### Download the [latest program release](https://github.com/itsgeagle/caiedownloader/releases/latest/)!
