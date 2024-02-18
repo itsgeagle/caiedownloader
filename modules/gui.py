@@ -20,6 +20,8 @@ oct_nov = StringVar()
 oct_nov.set('N')
 paper_type = StringVar()
 paper_type.set("Question Papers")
+remove_blank = StringVar()
+remove_blank.set('N')
 
 # GUI
 title_label = Label(root, text="CAIE Downloader", font=('Montserrat', 25))
@@ -53,3 +55,4 @@ series_label = Label(root, text="\nExam series to download", font=('Montserrat',
 Checkbutton(root, text='Feb/March', variable=feb_march, onvalue='Y', offvalue='N').pack(pady=10)
 Checkbutton(root, text='May/June', variable=may_june, onvalue='Y', offvalue='N').pack(pady=10)
 Checkbutton(root, text='Oct/Nov', variable=oct_nov, onvalue='Y', offvalue='N').pack(pady=10)
+Checkbutton(root, text='Remove Blank Pages', variable=remove_blank, onvalue='Y', offvalue='N').pack(pady=10)

@@ -17,11 +17,14 @@ This project provides a simple GUI-based utility tool which allows students of t
 * The **years** for which papers are to be downloaded (_e.g. 2020-23_)
 * The **exam series** for which to download papers (_e.g. Feb/March_)
 
+You can also automatically remove **blank pages** and **additional pages** if you wish! Downloading mark schemes is also possible simply through a dropdown.
+
 When run, the program produces a simple, elegant and intuitive GUI window, where you can enter the details of what you would like to download. The file will automatically be created and output to the directory which you pick during the file selection menu which pops up after downloading is finished.
 
 <div align="center">
-<img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/8b37d459-3059-4446-a004-41c053ad6a44">
+<img width="568" alt="GUI preview" src="https://github.com/itsgeagle/caiedownloader/assets/119720547/313a19bc-929d-4a85-bdeb-32fa98acd255">
 </div>
+
 
 
 
