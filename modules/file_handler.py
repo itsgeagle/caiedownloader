@@ -46,7 +46,7 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks):
 
     files = os.listdir(TEMPPATH)
     files.remove('.gitignore')
-
+    files = sorted(files)
     outFile = fitz.open(HOMEPATH + "/assets/blank.pdf")
 
     status = False

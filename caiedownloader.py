@@ -42,17 +42,6 @@ def main():
                     download_paper(subCode, this_code, year, '2', 'w', paperType)
                     download_paper(subCode, this_code, year, '3', 'w', paperType)
         if not compile_pdf(subCode, paperCode, str(start), str(end), remove_blanks):
-                if feb_march.get() == 'Y' and year > 15:
-                    download_paper(subCode, this_code, year, '2', 'm', paperType)
-                if may_june.get() == 'Y':
-                    download_paper(subCode, this_code, year, '1', 's', paperType)
-                    download_paper(subCode, this_code, year, '2', 's', paperType)
-                    download_paper(subCode, this_code, year, '3', 's', paperType)
-                if oct_nov.get() == 'Y':
-                    download_paper(subCode, this_code, year, '1', 'w', paperType)
-                    download_paper(subCode, this_code, year, '2', 'w', paperType)
-                    download_paper(subCode, this_code, year, '3', 'w', paperType)
-        if not compile_pdf(subCode, paperCode, str(start), str(end)):
             message_popup("Your query did not end up downloading any valid files. Please try again.", "Error")
         else:
             message_popup("Done processing your request!", "Success")
