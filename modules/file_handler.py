@@ -5,7 +5,7 @@ import fitz
 import requests
 
 from modules.dictionaries import IGCSE, ALevel, OLevel
-from modules.popup_handler import browse_path, message_popup
+from modules.popup_handler import browse_directory, browse_path, message_popup
 
 HOMEPATH = os.path.dirname(__file__)[:-8]
 TEMPPATH = HOMEPATH + "/temp/"
@@ -33,6 +33,28 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
     except requests.exceptions.RequestException as e:
         print(e)
 
+def transfer_papers_from_temp():
+    files = os.listdir(TEMPPATH)
+    path_to_save = ''
+
+    while path_to_save == '':
+        path_to_save = browse_directory()
+
+        if path_to_save == '':
+            message_popup("Please select a path to save the files to!", "Error")
+
+    for filename in files:
+        if filename == '.gitignore':
+            continue
+        try:
+            os.rename(
+                TEMPPATH + filename,
+                os.path.join(path_to_save, filename)
+            )
+
+        except FileExistsError:
+            message_popup(f"File {filename} already exists in the destination folder. Please remove it and try again.", "Error")
+            continue
 
 # Function to take all the PDFs currently in the /temp/ folder and compile them into a single PDF
 def compile_pdf(subCode, paperCode, start, end, delete_blanks):
@@ -84,7 +106,10 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks):
 
 # Function to clear the /temp/ folder at the beginning of each program run
 def clear_temp_files():
-    files = os.listdir(TEMPPATH)
-    files.remove('.gitignore')
-    for filename in files:
-        os.remove(TEMPPATH + filename)
+    try:
+        files = os.listdir(TEMPPATH)
+        files.remove('.gitignore')
+        for filename in files:
+            os.remove(TEMPPATH + filename)
+    except Exception as e:
+        pass

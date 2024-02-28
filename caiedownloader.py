@@ -4,7 +4,7 @@
 # Enter subject code, year range, and paper, and a PDF will be generated.
 
 # Imports
-from modules.file_handler import download_paper, compile_pdf, clear_temp_files
+from modules.file_handler import download_paper, compile_pdf, clear_temp_files, transfer_papers_from_temp
 from modules.gui import *
 from modules.popup_handler import version_popup, message_popup
 from modules.verification_handler import compare_version, validate_input
@@ -25,6 +25,7 @@ def main():
         fm = feb_march.get()
         mj = may_june.get()
         on = oct_nov.get()
+        com_p = compile_papers.get()
         remove_blanks = True if remove_blank.get() == 'Y' else False
         for this_code in paperCode.split(","):
             this_code = this_code.strip(" ")
@@ -41,7 +42,12 @@ def main():
                     download_paper(subCode, this_code, year, '1', 'w', paperType)
                     download_paper(subCode, this_code, year, '2', 'w', paperType)
                     download_paper(subCode, this_code, year, '3', 'w', paperType)
-        if not compile_pdf(subCode, paperCode, str(start), str(end), remove_blanks):
+
+        if com_p == 'N':
+            transfer_papers_from_temp()
+            message_popup("Done processing your request!", "Success")
+
+        elif not compile_pdf(subCode, paperCode, str(start), str(end), remove_blanks):
             message_popup("Your query did not end up downloading any valid files. Please try again.", "Error")
         else:
             message_popup("Done processing your request!", "Success")

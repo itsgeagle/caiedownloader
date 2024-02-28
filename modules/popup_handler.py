@@ -75,3 +75,16 @@ def browse_path(file_name):
 
     # Return file path
     return file_path
+
+def browse_directory():
+    # Create Toplevel window for file dialog
+    file_dialog = tk.Toplevel()
+    file_dialog.withdraw()
+
+    # Browse file path from save dialog
+    downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+    file_path = filedialog.askdirectory(initialdir=downloads_folder)
+    file_dialog.destroy()
+
+    # Return file path
+    return file_path
