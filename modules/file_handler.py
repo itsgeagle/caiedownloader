@@ -7,13 +7,16 @@ import requests
 from modules.dictionaries import IGCSE, ALevel, OLevel
 from modules.popup_handler import browse_directory, browse_path, message_popup
 
-HOMEPATH = os.path.dirname(__file__)[:-8]
-TEMPPATH = HOMEPATH + "/temp/"
-
+HOMEPATH = os.path.expanduser("~")
+TEMPPATH = os.path.join(HOMEPATH, ".caiedownloadertemp")
 
 # Function to download the paper which matches the entered type
 def download_paper(subCode, paperCode, year, variant, series, paperType):
+    if not os.path.exists(TEMPPATH):
+        create_temp_path()
+
     filename = f'{subCode}_{series}{year}_{paperType}_{paperCode}{variant}.pdf'
+
     if subCode in IGCSE:
         url = f'https://papers.gceguide.com/Cambridge%20IGCSE/{IGCSE.get(subCode)}20{year}/{filename}'
     elif subCode in ALevel:
@@ -25,7 +28,7 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
     try:
         paper = requests.get(url)
         if paper.status_code != 404:
-            path = TEMPPATH + filename
+            path = os.path.join(TEMPPATH, filename)
             with open(path, 'wb') as f:
                 f.write(paper.content)
         else:
@@ -48,7 +51,7 @@ def transfer_papers_from_temp():
             continue
         try:
             os.rename(
-                TEMPPATH + filename,
+                os.path.join(TEMPPATH, filename),
                 os.path.join(path_to_save, filename)
             )
 
@@ -75,7 +78,7 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks):
     for filename in files:
         print(f'Compiling {filename}')
         try:
-            f = fitz.open(TEMPPATH + filename)
+            f = fitz.open(os.path.join(TEMPPATH, filename))
         except fitz.FileDataError:
             print(f"Failed to compile {filename}")
         else:
@@ -110,6 +113,13 @@ def clear_temp_files():
         files = os.listdir(TEMPPATH)
         files.remove('.gitignore')
         for filename in files:
-            os.remove(TEMPPATH + filename)
+            os.remove(os.path.join(TEMPPATH, filename))
     except Exception as e:
         pass
+
+# Create the temp path if it does not exist
+def create_temp_path():
+    try:
+        os.mkdir(TEMPPATH)
+    except Exception as e:
+        print(e)
