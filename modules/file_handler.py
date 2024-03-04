@@ -65,16 +65,11 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks):
 
     if delete_blanks:
         for page in outFile:
-            word_list = page.get_text("words", delimiters=None)
-            for i in range(0, len(word_list) - 2):
-                if word_list[i][4] == "BLANK" and word_list[i+1][4] == "PAGE":
-                    print(f'Removing page {page.number} (BLANK PAGE)')
-                    pages_to_remove.append(page.number)
-                    break
-                if word_list[i][4] == "Additional" and word_list[i+1][4] == "Page":
-                    print(f'Removing page {page.number} (ADDITIONAL PAGE)')
-                    pages_to_remove.append(page.number)
-                    break
+            word_list : str = page.get_text("text", delimiters=None)
+            if 'BLANK PAGE' in word_list or 'Additional Page' in word_list:
+                print(f"Deleting blank/additional page: page {page.number + 1}")
+                pages_to_remove.append(page.number)
+
 
     if status:
         outFile.delete_pages(pages_to_remove)
