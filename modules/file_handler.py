@@ -21,15 +21,33 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
     else:
         url = f'https://papers.gceguide.com/O%20Levels/{OLevel.get(subCode)}20{year}/{filename}'
 
-    print(f'Downloading {filename} from {url}')
     try:
         paper = requests.get(url)
         if paper.status_code != 404:
+            print(f'Downloading {filename} from {url}')
             path = TEMPPATH + filename
             with open(path, 'wb') as f:
                 f.write(paper.content)
         else:
-            print(f"Failed to download {filename} - 404 error, paper was not found.")
+            print("File not found on GCE Guide - attempting to download from Dynamic Papers.")
+            url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
+            paper = requests.get(url)
+            if paper.status_code != 404:
+                print(f'Downloading {filename} from {url}')
+                path = TEMPPATH + filename
+                with open(path, 'wb') as f:
+                    f.write(paper.content)
+            else:
+                print("File not found on Dynamic Papers - attempting to download from Papa Cambridge.")
+                url = f'https://pastpapers.papacambridge.com/directories/CAIE/CAIE-pastpapers/upload/{filename}'
+                paper = requests.get(url)
+                if paper.status_code != 404:
+                    print(f'Downloading {filename} from {url}')
+                    path = TEMPPATH + filename
+                    with open(path, 'wb') as f:
+                        f.write(paper.content)
+                else:
+                    print(f"Failed to download {filename} - 404 error, paper was not found.")
     except requests.exceptions.RequestException as e:
         print(e)
 
