@@ -9,7 +9,7 @@ from modules.gui import *
 from modules.popup_handler import version_popup, message_popup
 from modules.verification_handler import compare_version, validate_input
 
-VERSION = 'v1.2.0'
+VERSION = 'v1.2.1'
 
 
 # Main method for the program
