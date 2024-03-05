@@ -54,7 +54,6 @@ def validate_input():
         return False
     for paper_code in paper_var.get().split(','):
         paper_code = paper_code.strip(" ")
-        print(paper_code)
         if not paper_code.isnumeric():
             message_popup("The paper code must be a number! Try again.", "Error")
             return False
@@ -76,7 +75,7 @@ def validate_input():
     if not int(end_year.get()) >= int(start_year.get()):
         message_popup("The end year must be greater or equal to the start year! Try again.", "Error")
         return False
-    if feb_march.get() == 'N' and may_june.get() == 'N' and may_june.get() == 'N':
+    if feb_march.get() == 'N' and may_june.get() == 'N' and oct_nov.get() == 'N':
         message_popup("You must select at least one exam series! Try again.", "Error")
         return False
     return True

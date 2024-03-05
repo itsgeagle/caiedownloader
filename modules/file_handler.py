@@ -21,15 +21,33 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
     else:
         url = f'https://papers.gceguide.com/O%20Levels/{OLevel.get(subCode)}20{year}/{filename}'
 
-    print(f'Downloading {filename} from {url}')
     try:
         paper = requests.get(url)
         if paper.status_code != 404:
+            print(f'Downloading {filename} from {url}')
             path = TEMPPATH + filename
             with open(path, 'wb') as f:
                 f.write(paper.content)
         else:
-            print(f"Failed to download {filename} - 404 error, paper was not found.")
+            print("File not found on GCE Guide - attempting to download from Dynamic Papers.")
+            url = f'https://dynamicpapers.com/wp-content/uploads/2015/09/{filename}'
+            paper = requests.get(url)
+            if paper.status_code != 404:
+                print(f'Downloading {filename} from {url}')
+                path = TEMPPATH + filename
+                with open(path, 'wb') as f:
+                    f.write(paper.content)
+            else:
+                print("File not found on Dynamic Papers - attempting to download from Papa Cambridge.")
+                url = f'https://pastpapers.papacambridge.com/directories/CAIE/CAIE-pastpapers/upload/{filename}'
+                paper = requests.get(url)
+                if paper.status_code != 404:
+                    print(f'Downloading {filename} from {url}')
+                    path = TEMPPATH + filename
+                    with open(path, 'wb') as f:
+                        f.write(paper.content)
+                else:
+                    print(f"Failed to download {filename} - 404 error, paper was not found.")
     except requests.exceptions.RequestException as e:
         print(e)
 
@@ -65,16 +83,11 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks):
 
     if delete_blanks:
         for page in outFile:
-            word_list = page.get_text("words", delimiters=None)
-            for i in range(0, len(word_list) - 2):
-                if word_list[i][4] == "BLANK" and word_list[i+1][4] == "PAGE":
-                    print(f'Removing page {page.number} (BLANK PAGE)')
-                    pages_to_remove.append(page.number)
-                    break
-                if word_list[i][4] == "Additional" and word_list[i+1][4] == "Page":
-                    print(f'Removing page {page.number} (ADDITIONAL PAGE)')
-                    pages_to_remove.append(page.number)
-                    break
+            word_list : str = page.get_text("text", delimiters=None)
+            if 'BLANK PAGE' in word_list or 'Additional Page' in word_list:
+                print(f"Deleting blank/additional page: page {page.number + 1}")
+                pages_to_remove.append(page.number)
+
 
     if status:
         outFile.delete_pages(pages_to_remove)
