@@ -242,3 +242,4 @@ pyvenv.cfg
 bin
 lib
 include
+config.ini

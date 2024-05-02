@@ -1,5 +1,6 @@
 # Contains the primary GUI elements
 from tkinter import *
+from modules.config_handler import fetch_from_config
 
 # Initialize GUI window
 root = Tk()
@@ -21,7 +22,15 @@ oct_nov.set('N')
 paper_type = StringVar()
 paper_type.set("Question Papers")
 remove_blank = StringVar()
-remove_blank.set('N')
+remove_additional = StringVar()
+remove_formula = StringVar()
+
+def refresh_config_data():
+    remove_blank.set(fetch_from_config("remove_blank"))
+    remove_additional.set(fetch_from_config("remove_additional"))
+    remove_formula.set(fetch_from_config("remove_formula"))
+
+refresh_config_data()
 
 # GUI
 title_label = Label(root, text="CAIE Downloader", font=('Montserrat', 25))
@@ -52,7 +61,10 @@ select_type = OptionMenu(root, paper_type, *menuOptions)
 select_type.pack(pady=10)
 
 series_label = Label(root, text="\nExam series to download", font=('Montserrat', 16))
-Checkbutton(root, text='Feb/March', variable=feb_march, onvalue='Y', offvalue='N').pack(pady=10)
-Checkbutton(root, text='May/June', variable=may_june, onvalue='Y', offvalue='N').pack(pady=10)
-Checkbutton(root, text='Oct/Nov', variable=oct_nov, onvalue='Y', offvalue='N').pack(pady=10)
+Checkbutton(root, text='Feb/March', variable=feb_march, onvalue='Y', offvalue='N').pack(pady=5)
+Checkbutton(root, text='May/June', variable=may_june, onvalue='Y', offvalue='N').pack(pady=5)
+Checkbutton(root, text='Oct/Nov', variable=oct_nov, onvalue='Y', offvalue='N').pack(pady=5)
 Checkbutton(root, text='Remove Blank Pages', variable=remove_blank, onvalue='Y', offvalue='N').pack(pady=10)
+Checkbutton(root, text='Remove Additional Pages', variable=remove_additional, onvalue='Y', offvalue='N').pack(pady=5)
+Checkbutton(root, text='Remove Formula Pages', variable=remove_formula, onvalue='Y', offvalue='N').pack(pady=5)
+
