@@ -15,11 +15,11 @@ TEMPPATH = HOMEPATH + "/temp/"
 def download_paper(subCode, paperCode, year, variant, series, paperType):
     filename = f'{subCode}_{series}{year}_{paperType}_{paperCode}{variant}.pdf'
     if subCode in IGCSE:
-        url = f'https://papers.gceguide.net/Cambridge%20IGCSE/{IGCSE.get(subCode)}20{year}/{filename}'
+        url = f'https://papers.gceguide.cc/cambridge-IGCSE/{IGCSE.get(subCode)}20{year}/{filename}'
     elif subCode in ALevel:
-        url = f'https://papers.gceguide.net/A%20Levels/{ALevel.get(subCode)}20{year}/{filename}'
+        url = f'https://papers.gceguide.cc/a-levels/{ALevel.get(subCode)}20{year}/{filename}'
     else:
-        url = f'https://papers.gceguide.net/O%20Levels/{OLevel.get(subCode)}20{year}/{filename}'
+        url = f'https://papers.gceguide.cc/o-levels/{OLevel.get(subCode)}20{year}/{filename}'
 
     try:
         paper = requests.get(url)
@@ -102,7 +102,7 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks, delete_additional
                 if 'Stefan–Boltzmann constant' in word_list:
                     print(f'Deleting data and constants: page {page.number + 1}')
                     pages_to_remove.append(page.number)
-                if 'Mathematical Formulae' in word_list:
+                if 'Mathematical Formulae' in word_list or 'Formula List' in word_list:
                     print(f'Deleting mathematical formulae: page {page.number + 1}')
                     pages_to_remove.append(page.number)
 
