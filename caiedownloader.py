@@ -10,7 +10,7 @@ from modules.popup_handler import version_popup, message_popup, edit_config
 from modules.verification_handler import compare_version, validate_input
 from modules.config_handler import init_config
 
-VERSION = 'v1.3.0'
+VERSION = 'v1.3.1'
 
 
 # Main method for the program
