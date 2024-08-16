@@ -36,11 +36,11 @@ def main():
             for year in range(start, end + 1):
                 if fm == 'Y' and year > 15:
                     download_paper(subCode, this_code, year, '2', 'm', paperType)
-                if mj == 'Y':
+                if mj == 'Y' and not year == 24:
                     download_paper(subCode, this_code, year, '1', 's', paperType)
                     download_paper(subCode, this_code, year, '2', 's', paperType)
                     download_paper(subCode, this_code, year, '3', 's', paperType)
-                if on == 'Y':
+                if on == 'Y' and not year == 24:
                     download_paper(subCode, this_code, year, '1', 'w', paperType)
                     download_paper(subCode, this_code, year, '2', 'w', paperType)
                     download_paper(subCode, this_code, year, '3', 'w', paperType)

@@ -7,8 +7,8 @@ import requests
 from modules.dictionaries import IGCSE, ALevel, OLevel
 from modules.popup_handler import browse_path, message_popup
 
-HOMEPATH = os.path.dirname(__file__)[:-8]
-TEMPPATH = HOMEPATH + "/temp/"
+HOMEPATH = os.path.join(os.path.expanduser("~"), ".caiedownloader")
+TEMPPATH = os.path.join(HOMEPATH, "temp")
 
 
 # Function to download the paper which matches the entered type
@@ -25,7 +25,7 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
         paper = requests.get(url)
         if paper.status_code != 404:
             print(f'Downloading {filename} from {url}')
-            path = TEMPPATH + filename
+            path = os.path.join(TEMPPATH, filename)
             with open(path, 'wb') as f:
                 f.write(paper.content)
         else:
@@ -34,7 +34,7 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
             paper = requests.get(url)
             if paper.status_code != 404:
                 print(f'Downloading {filename} from {url}')
-                path = TEMPPATH + filename
+                path = os.path.join(TEMPPATH, filename)
                 with open(path, 'wb') as f:
                     f.write(paper.content)
             else:
@@ -43,7 +43,7 @@ def download_paper(subCode, paperCode, year, variant, series, paperType):
                 paper = requests.get(url)
                 if paper.status_code != 404:
                     print(f'Downloading {filename} from {url}')
-                    path = TEMPPATH + filename
+                    path = os.path.join(TEMPPATH, filename)
                     with open(path, 'wb') as f:
                         f.write(paper.content)
                 else:
@@ -63,15 +63,24 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks, delete_additional
     print(f"Attempting to save compiled PDF to {compiled}")
 
     files = os.listdir(TEMPPATH)
-    files.remove('.gitignore')
     files = sorted(files)
-    outFile = fitz.open(HOMEPATH + "/assets/blank.pdf")
+    if os.path.exists(os.path.join(HOMEPATH, "assets", "blank.pdf")):
+        outFile = fitz.open(os.path.join(HOMEPATH, "assets", "blank.pdf"))
+    else:
+        if not os.path.exists(os.path.join(HOMEPATH, "assets")):
+            os.mkdir(os.path.join(HOMEPATH, "assets"))
+        url = 'https://raw.githubusercontent.com/itsgeagle/caiedownloader/master/assets/blank.pdf'
+        blankFile = requests.get(url)
+        if blankFile.status_code != 404:
+            with open(os.path.join(HOMEPATH, "assets", "blank.pdf"), 'wb') as f:
+                f.write(blankFile.content)
+        outFile = fitz.open(os.path.join(HOMEPATH, "assets", "blank.pdf"))
 
     status = False
     for filename in files:
         print(f'Compiling {filename}')
         try:
-            f = fitz.open(TEMPPATH + filename)
+            f = fitz.open(os.path.join(TEMPPATH, filename))
         except fitz.FileDataError:
             print(f"Failed to compile {filename}")
         else:
@@ -106,7 +115,6 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks, delete_additional
                     print(f'Deleting mathematical formulae: page {page.number + 1}')
                     pages_to_remove.append(page.number)
 
-
     if status:
         outFile.delete_pages(pages_to_remove)
         outFile.save(compiled)
@@ -115,7 +123,9 @@ def compile_pdf(subCode, paperCode, start, end, delete_blanks, delete_additional
 
 # Function to clear the /temp/ folder at the beginning of each program run
 def clear_temp_files():
-    files = os.listdir(TEMPPATH)
-    files.remove('.gitignore')
-    for filename in files:
-        os.remove(TEMPPATH + filename)
+    if os.path.exists(TEMPPATH):
+        files = os.listdir(TEMPPATH)
+        for filename in files:
+            os.remove(os.path.join(TEMPPATH, filename))
+    else:
+        os.makedirs(TEMPPATH)
