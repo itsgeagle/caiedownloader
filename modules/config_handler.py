@@ -22,6 +22,26 @@ def init_config():
             config_file.write(config_file_obj)
             config_file_obj.flush()
             config_file_obj.close()
+    config = configparser.ConfigParser()
+    config.read(os.path.join(HOMEPATH, "config.ini"))
+
+    try: _ = config["CompileSettings"]["remove_blank"]
+    except KeyError: config["CompileSettings"]["remove_blank"] = "N"
+
+    try: _ = config["CompileSettings"]["remove_additional"]
+    except KeyError: config["CompileSettings"]["remove_additional"] = "N"
+
+    try: _ = config["CompileSettings"]["remove_formula"]
+    except KeyError: config["CompileSettings"]["remove_formula"] = "N"
+
+    try: _ = config["CompileSettings"]["download_directory"]
+    except KeyError: config["CompileSettings"]["download_directory"] = os.path.join(os.path.expanduser("~"), "Downloads")
+
+    with open(os.path.join(HOMEPATH, "config.ini"), 'w') as config_file_obj:
+        config.write(config_file_obj)
+        config_file_obj.flush()
+        config_file_obj.close()
+
 
 def fetch_from_config(item):
     init_config()
@@ -38,4 +58,3 @@ def save_to_config(item, value):
         config_file.write(config_file_obj)
         config_file_obj.flush()
         config_file_obj.close()
-
