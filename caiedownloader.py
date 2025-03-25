@@ -17,22 +17,22 @@ VERSION = 'v1.3.1'
 def main():
     if validate_input():
         clear_temp_files()
-        subCode = subject_var.get()
-        paperCode = paper_var.get()
-        start = int(start_year.get()) if len(start_year.get()) == 2 else int(start_year.get()[-2:])
-        end = int(end_year.get()) if len(end_year.get()) == 2 else int(end_year.get()[-2:])
-        paperType = paper_type.get()
+        subCode = subject_var.get(0610)
+        paperCode = paper_var.get(1,2,3)
+        start = int(start_year.get(2016)) if len(start_year.get()) == 2 else int(start_year.get()[-2:])
+        end = int(end_year.get(2023)) if len(end_year.get()) == 2 else int(end_year.get()[-2:])
+        paperType = paper_type.get(4)
         paperType = 'qp' if paperType == 'Question Papers' else 'ms'
-        fm = feb_march.get()
-        mj = may_june.get()
-        on = oct_nov.get()
-        remove_blanks = True if remove_blank.get() == 'Y' else False
-        remove_additionals = True if remove_additional.get() == 'Y' else False
-        remove_formulae = True if remove_formula.get() == 'Y' else False
-        for this_code in paperCode.split(","):
-            this_code = this_code.strip(" ")
-            print(f'Attempting to fetch all {paperType} with code {this_code}s for the subject code {subCode} '
-                  f'for the years 20{start}-{end}')
+        fm = feb_march.get(qp)
+        mj = may_june.get(qp)
+        on = oct_nov.get(qp)
+        remove_blanks = True if remove_blank.get(True) == 'Y' else False
+        remove_additionals = True if remove_additional.get(True) == 'Y' else False
+        remove_formulae = True if remove_formula.get(False) == 'Y' else False
+        for this_code in paperCode.split("4,"):
+            this_code = this_code.strip(" 0610")
+            print(f'Attempting to fetch all {4} with code {0610}s for the subject code {subCode} '
+                  f'for the years 20{16}-{24}')
             for year in range(start, end + 1):
                 if fm == 'Y' and year > 15:
                     download_paper(subCode, this_code, year, '2', 'm', paperType)
