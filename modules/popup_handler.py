@@ -1,89 +1,108 @@
 # Contains helper methods for creating popups
-import os
 import tkinter as tk
+from tkinter import ttk, filedialog
 import webbrowser
-from tkinter import filedialog
+
 from modules.config_handler import fetch_from_config, save_to_config
-from modules.gui import root, refresh_config_data
+from modules.gui import root, refresh_config_data, CARD, BG, PRIMARY, PRI_ACT, TEXT, MUTED, BORDER, FONT
 
 download_directory = fetch_from_config("download_directory")
 
-# Function to create a popup window displaying the latest version of the software
+
+def _make_popup(title, width=400):
+    win = tk.Toplevel(root)
+    win.title(title)
+    win.configure(bg=CARD)
+    win.resizable(False, False)
+    root.update_idletasks()
+    x = root.winfo_x() + (root.winfo_width() - width) // 2
+    y = root.winfo_y() + root.winfo_height() // 3
+    win.geometry(f"+{x}+{y}")
+    win.minsize(width, 0)
+    return win
+
+
+def _popup_btn(parent, text, command, primary=False):
+    style = "Primary.TButton" if primary else "Ghost.TButton"
+    return ttk.Button(parent, text=text, command=command, style=style)
+
+
+def _divider(parent):
+    tk.Frame(parent, bg=BORDER, height=1).pack(fill=tk.X, pady=(0, 16))
+
+
 def version_popup(latest):
-    version = tk.Toplevel(root)
-    version.title("New Version Available")
+    win = _make_popup("New Version Available", width=440)
 
-    tk.Label(
-        version,
-        text=f'A new version of CAIE Downloader ({latest}) is available! To download the latest version, click the '
-             f'button below to visit the releases page!',
-        font=("Helvetica", 16)
-    ).pack(padx=10)
+    tk.Frame(win, bg=PRIMARY, height=4).pack(fill=tk.X)
 
-    release_button = tk.Button(
-        version,
-        text="Open Releases Page",
-        command=lambda: webbrowser.open_new_tab("https://github.com/itsgeagle/caiedownloader/releases")
-    )
-    release_button.pack(pady=10)
+    body = tk.Frame(win, bg=CARD, padx=28, pady=24)
+    body.pack(fill=tk.BOTH, expand=True)
 
-    cancel_button = tk.Button(
-        version,
-        text="Cancel",
-        command=version.destroy
-    )
-    cancel_button.pack(pady=10)
+    tk.Label(body, text="Update Available",
+             font=(FONT, 16, "bold"), bg=CARD, fg=TEXT).pack(anchor="w")
+    tk.Label(body,
+             text=f"Version {latest} is now available on GitHub.",
+             font=(FONT, 11), bg=CARD, fg=MUTED,
+             wraplength=380, justify="left").pack(anchor="w", pady=(6, 20))
 
-    version.wait_visibility()
-    version.grab_set()
-    version.focus_set()
-    version.wait_window()
+    btn_row = tk.Frame(body, bg=CARD)
+    btn_row.pack(fill=tk.X)
+    _popup_btn(btn_row, "Open Releases Page",
+               lambda: webbrowser.open_new_tab(
+                   "https://github.com/itsgeagle/caiedownloader/releases"),
+               primary=True).pack(side=tk.LEFT)
+    _popup_btn(btn_row, "Dismiss", win.destroy).pack(side=tk.LEFT, padx=(10, 0))
+
+    win.wait_visibility()
+    win.grab_set()
+    win.focus_set()
+    win.wait_window()
 
 
 def message_popup(message, title):
-    error_window = tk.Toplevel(root)
-    error_window.title(title)
+    is_error = title.lower() == "error"
+    accent = "#dc2626" if is_error else PRIMARY
 
-    tk.Label(
-        error_window,
-        text=message,
-        font=("Montserrat", 16)
-    ).pack()
+    win = _make_popup(title, width=400)
+    tk.Frame(win, bg=accent, height=4).pack(fill=tk.X)
 
-    cancel_button = tk.Button(
-        error_window,
-        text="Close",
-        command=error_window.destroy
-    )
-    cancel_button.pack(pady=10)
+    body = tk.Frame(win, bg=CARD, padx=28, pady=24)
+    body.pack(fill=tk.BOTH, expand=True)
 
-    error_window.wait_visibility()
-    error_window.grab_set()
-    error_window.focus_set()
-    error_window.wait_window()
+    tk.Label(body, text=title,
+             font=(FONT, 15, "bold"), bg=CARD, fg=TEXT).pack(anchor="w")
+    tk.Label(body, text=message,
+             font=(FONT, 11), bg=CARD, fg=MUTED,
+             wraplength=344, justify="left").pack(anchor="w", pady=(6, 20))
+
+    _popup_btn(body, "Close", win.destroy, primary=True).pack(anchor="w")
+
+    win.wait_visibility()
+    win.grab_set()
+    win.focus_set()
+    win.wait_window()
 
 
-# Function to allow user to browse for download path
 def browse_path(file_name):
-    # Create Toplevel window for file dialog
-    file_dialog = tk.Toplevel(root)
-    file_dialog.withdraw()
-
-    # Browse file path from save dialog
-    file_path = filedialog.asksaveasfilename(initialdir=download_directory, initialfile=file_name, defaultextension=".pdf")
-    file_dialog.destroy()
-
-    # Return file path
+    dlg = tk.Toplevel(root)
+    dlg.withdraw()
+    file_path = filedialog.asksaveasfilename(
+        initialdir=download_directory,
+        initialfile=file_name,
+        defaultextension=".pdf"
+    )
+    dlg.destroy()
     return file_path
 
 
-# Function to allow user to browse a directory for default download
 def browse_folder():
-    file_dialog = tk.Toplevel(root)
-    file_dialog.withdraw()
+    dlg = tk.Toplevel(root)
+    dlg.withdraw()
     file_path = filedialog.askdirectory(initialdir=download_directory)
-    file_dialog.destroy()
+    dlg.destroy()
     return file_path
+
 
 def edit_download_path():
     global download_directory
@@ -93,53 +112,56 @@ def edit_download_path():
         file_path = browse_folder()
     download_directory = file_path
     save_to_config("download_directory", download_directory)
-    message_popup(f"Set default download directory to {download_directory}", "Success")
+    message_popup(f"Default download directory set to:\n{download_directory}", "Success")
 
 
 def edit_config():
-    remove_blank = tk.StringVar()
-    remove_blank.set(fetch_from_config("remove_blank"))
-    remove_additional = tk.StringVar()
-    remove_additional.set(fetch_from_config("remove_additional"))
-    remove_formula = tk.StringVar()
-    remove_formula.set(fetch_from_config("remove_formula"))
+    rb = tk.StringVar(value=fetch_from_config("remove_blank"))
+    ra = tk.StringVar(value=fetch_from_config("remove_additional"))
+    rf = tk.StringVar(value=fetch_from_config("remove_formula"))
 
-    def save_config():
-        save_to_config(item="remove_blank", value=remove_blank.get())
-        save_to_config(item="remove_additional", value=remove_additional.get())
-        save_to_config(item="remove_formula", value=remove_formula.get())
+    win = _make_popup("Preferences", width=420)
+    tk.Frame(win, bg=PRIMARY, height=4).pack(fill=tk.X)
+
+    body = tk.Frame(win, bg=CARD, padx=28, pady=24)
+    body.pack(fill=tk.BOTH, expand=True)
+
+    tk.Label(body, text="Preferences",
+             font=(FONT, 16, "bold"), bg=CARD, fg=TEXT).pack(anchor="w")
+    tk.Label(body, text="Default settings applied on each new session.",
+             font=(FONT, 10), bg=CARD, fg=MUTED).pack(anchor="w", pady=(4, 18))
+
+    def _pref_check(text, var):
+        tk.Checkbutton(body, text=text, variable=var,
+                       onvalue="Y", offvalue="N",
+                       font=(FONT, 11), bg=CARD, fg=TEXT,
+                       activebackground=CARD, selectcolor=CARD,
+                       cursor="hand2").pack(anchor="w", pady=3)
+
+    _pref_check("Remove blank pages by default",      rb)
+    _pref_check("Remove additional pages by default", ra)
+    _pref_check("Remove formula pages by default",    rf)
+
+    tk.Frame(body, bg=BORDER, height=1).pack(fill=tk.X, pady=(18, 16))
+
+    _popup_btn(body, "⚙  Change Default Download Folder",
+               edit_download_path).pack(anchor="w")
+
+    tk.Frame(body, bg=BORDER, height=1).pack(fill=tk.X, pady=(16, 18))
+
+    def save():
+        save_to_config("remove_blank",      rb.get())
+        save_to_config("remove_additional", ra.get())
+        save_to_config("remove_formula",    rf.get())
         refresh_config_data()
-        config_editor.destroy()
+        win.destroy()
 
-    config_editor = tk.Toplevel(root)
+    btn_row = tk.Frame(body, bg=CARD)
+    btn_row.pack(fill=tk.X)
+    _popup_btn(btn_row, "Save", save, primary=True).pack(side=tk.LEFT)
+    _popup_btn(btn_row, "Cancel", win.destroy).pack(side=tk.LEFT, padx=(10, 0))
 
-    tk.Label(
-        config_editor,
-        text="Edit your default configuration here. These are the values which load in when you first run the program.",
-        font=("Montserrat", 16)
-    ).pack()
-
-    tk.Checkbutton(config_editor, text='Remove Blank Pages', variable=remove_blank, onvalue='Y', offvalue='N').pack(pady=10)
-    tk.Checkbutton(config_editor, text='Remove Additional Pages', variable=remove_additional, onvalue='Y', offvalue='N').pack(pady=10)
-    tk.Checkbutton(config_editor, text='Remove Formula Pages', variable=remove_formula, onvalue='Y', offvalue='N').pack(pady=10)
-
-    tk.Button(
-        config_editor,
-        text='Edit Default Download Path',
-        command=edit_download_path
-    ).pack()
-
-    submit = tk.Button(
-        config_editor,
-        text="Save",
-        command=save_config
-    )
-    submit.pack(pady=10)
-
-    cancel_button = tk.Button(
-        config_editor,
-        text="Close",
-        command=config_editor.destroy
-    )
-    cancel_button.pack(pady=10)
-
+    win.wait_visibility()
+    win.grab_set()
+    win.focus_set()
+    win.wait_window()

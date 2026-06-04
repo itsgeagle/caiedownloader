@@ -243,3 +243,4 @@ bin
 lib
 include
 config.ini
+.DS_Store
